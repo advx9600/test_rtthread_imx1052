@@ -1,0 +1,2 @@
+手动修改配置
+	离散加载文件配置为 MIMXRT1052xxxxx_nor_sdram_txt_sdram.scf

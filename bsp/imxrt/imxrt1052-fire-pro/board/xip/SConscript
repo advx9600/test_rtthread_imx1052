@@ -1,0 +1,14 @@
+from building import *
+
+cwd = GetCurrentDir()
+
+src = []
+
+if GetDepend('BSP_USING_RAM_BOOT'):
+    src += ['fire_imxrt1052_sdram_ini_dcd.c']
+    src += ['fire_imxrt1052_spiflash_config.c']
+    src += ['fsl_flexspi_nor_boot.c']
+    
+group = DefineGroup('xip', src, depend = [''], CPPPATH = path)
+
+Return('group')

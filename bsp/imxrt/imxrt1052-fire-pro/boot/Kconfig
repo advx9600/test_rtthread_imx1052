@@ -1,0 +1,7 @@
+menu "Boot device config"
+
+	config BSP_BOOT_NOR_SDRAM_TXT_SDRAM
+	bool "boot from sdram after copy from nor flash"
+	default n
+
+endmenu
