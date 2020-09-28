@@ -12,7 +12,27 @@ menu "On-chip Peripheral Drivers"
     config BSP_USING_DMA
         bool "Enable DMA"
         default n
-        
+		
+    menuconfig BSP_USING_SPI
+		bool "Enable SPI"
+		select RT_USING_SPI
+		select BSP_USING_DMA
+		default n
+		
+		if BSP_USING_SPI
+			config BSP_USING_SPI1
+				bool "bsp using spi1"
+				default n
+				
+			config BSP_USING_SPI2
+				bool "bsp using spi2"
+				default n
+				
+			config BSP_USING_SPI3
+				bool "bsp using spi3"
+				default n
+		endif
+		
     config BSP_USING_GPIO
         bool "Enable GPIO"
         select RT_USING_PIN

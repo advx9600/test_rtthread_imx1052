@@ -6,11 +6,11 @@
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Pins v5.0
+product: Pins v8.0
 processor: MIMXRT1052xxxxB
 package_id: MIMXRT1052DVL6B
 mcu_data: ksdk2_0
-processor_version: 5.0.2
+processor_version: 8.0.2
 board: IMXRT1050-EVKB
 pin_labels:
 - {pin_num: G11, pin_signal: GPIO_AD_B0_03, label: BSP_BEEP}
@@ -22,6 +22,7 @@ pin_labels:
 
 #include "fsl_common.h"
 #include "fsl_iomuxc.h"
+#include "fsl_gpio.h"
 #include "pin_mux.h"
 
 /* FUNCTION ************************************************************************************************************
@@ -53,6 +54,12 @@ BOARD_InitPins:
   - {pin_num: G11, peripheral: GPIO1, signal: 'gpio_io, 03', pin_signal: GPIO_AD_B0_03}
   - {pin_num: J13, peripheral: GPIO1, signal: 'gpio_io, 27', pin_signal: GPIO_AD_B1_11}
   - {pin_num: K12, peripheral: GPIO1, signal: 'gpio_io, 21', pin_signal: GPIO_AD_B1_05}
+  - {pin_num: L3, peripheral: LPSPI2, signal: PCS0, pin_signal: GPIO_SD_B1_06}
+  - {pin_num: L4, peripheral: LPSPI2, signal: SCK, pin_signal: GPIO_SD_B1_07}
+  - {pin_num: P3, peripheral: LPSPI2, signal: SDO, pin_signal: GPIO_SD_B1_08}
+  - {pin_num: N4, peripheral: LPSPI2, signal: SDI, pin_signal: GPIO_SD_B1_09}
+  - {pin_num: P4, peripheral: GPIO3, signal: 'gpio_io, 10', pin_signal: GPIO_SD_B1_10, direction: OUTPUT, gpio_init_state: 'true'}
+  - {pin_num: P5, peripheral: GPIO3, signal: 'gpio_io, 11', pin_signal: GPIO_SD_B1_11, direction: OUTPUT, gpio_init_state: 'true'}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 
@@ -64,6 +71,24 @@ BOARD_InitPins:
  * END ****************************************************************************************************************/
 void BOARD_InitPins(void) {
   CLOCK_EnableClock(kCLOCK_Iomuxc);           /* iomuxc clock (iomuxc_clk_enable): 0x03U */
+
+  /* GPIO configuration of FlexSPI_D2_A on GPIO_SD_B1_10 (pin P4) */
+  gpio_pin_config_t FlexSPI_D2_A_config = {
+      .direction = kGPIO_DigitalOutput,
+      .outputLogic = 1U,
+      .interruptMode = kGPIO_NoIntmode
+  };
+  /* Initialize GPIO functionality on GPIO_SD_B1_10 (pin P4) */
+  GPIO_PinInit(GPIO3, 10U, &FlexSPI_D2_A_config);
+
+  /* GPIO configuration of FlexSPI_D3_A on GPIO_SD_B1_11 (pin P5) */
+  gpio_pin_config_t FlexSPI_D3_A_config = {
+      .direction = kGPIO_DigitalOutput,
+      .outputLogic = 1U,
+      .interruptMode = kGPIO_NoIntmode
+  };
+  /* Initialize GPIO functionality on GPIO_SD_B1_11 (pin P5) */
+  GPIO_PinInit(GPIO3, 11U, &FlexSPI_D3_A_config);
 
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_AD_B0_03_GPIO1_IO03,        /* GPIO_AD_B0_03 is configured as GPIO1_IO03 */
@@ -111,31 +136,23 @@ void BOARD_InitPins(void) {
       IOMUXC_GPIO_B1_13_LPUART5_RX,           /* GPIO_B1_13 is configured as LPUART5_RX */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B0_14_FLEXCAN2_TX,       /* GPIO_AD_B0_14 is configured as FLEXCAN2_TX */
-      1U);                                    /* Software Input On Field: Force input path of pad GPIO_AD_B0_14 */
+      IOMUXC_GPIO_SD_B1_06_LPSPI2_PCS0,       /* GPIO_SD_B1_06 is configured as LPSPI2_PCS0 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B0_15_FLEXCAN2_RX,       /* GPIO_AD_B0_15 is configured as FLEXCAN2_RX */
-      1U);                                    /* Software Input On Field: Force input path of pad GPIO_AD_B0_15 */
-  IOMUXC_SetPinConfig(
-      IOMUXC_GPIO_AD_B0_14_FLEXCAN2_TX,       /* GPIO_AD_B0_14 PAD functional properties : */
-      0x10B0u);                               /* Slew Rate Field: Slow Slew Rate
-                                                 Drive Strength Field: R0/6
-                                                 Speed Field: medium(100MHz)
-                                                 Open Drain Enable Field: Open Drain Disabled
-                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
-                                                 Pull / Keep Select Field: Keeper
-                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
-                                                 Hyst. Enable Field: Hysteresis Disabled */
-  IOMUXC_SetPinConfig(
-      IOMUXC_GPIO_AD_B0_15_FLEXCAN2_RX,       /* GPIO_AD_B0_15 PAD functional properties : */
-      0x10B0u);                               /* Slew Rate Field: Slow Slew Rate
-                                                 Drive Strength Field: R0/6
-                                                 Speed Field: medium(100MHz)
-                                                 Open Drain Enable Field: Open Drain Disabled
-                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
-                                                 Pull / Keep Select Field: Keeper
-                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
-                                                 Hyst. Enable Field: Hysteresis Disabled */
+      IOMUXC_GPIO_SD_B1_07_LPSPI2_SCK,        /* GPIO_SD_B1_07 is configured as LPSPI2_SCK */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_SD_B1_08_LPSPI2_SD0,        /* GPIO_SD_B1_08 is configured as LPSPI2_SD0 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_SD_B1_09_LPSPI2_SDI,        /* GPIO_SD_B1_09 is configured as LPSPI2_SDI */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_SD_B1_10_GPIO3_IO10,        /* GPIO_SD_B1_10 is configured as GPIO3_IO10 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_SD_B1_11_GPIO3_IO11,        /* GPIO_SD_B1_11 is configured as GPIO3_IO11 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
 }
 
 /***********************************************************************************************************************
