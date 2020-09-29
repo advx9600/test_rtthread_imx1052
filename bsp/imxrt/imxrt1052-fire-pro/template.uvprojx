@@ -284,7 +284,7 @@
                 <Size>0x0</Size>
               </OCR_RVCT5>
               <OCR_RVCT6>
-                <Type>1</Type>
+                <Type>0</Type>
                 <StartAddress>0x20200000</StartAddress>
                 <Size>0x40000</Size>
               </OCR_RVCT6>
@@ -370,7 +370,7 @@
             <TextAddressRange>0x00000000</TextAddressRange>
             <DataAddressRange>0x10000000</DataAddressRange>
             <pXoBase></pXoBase>
-            <ScatterFile>.\board\linker_scripts\link.sct</ScatterFile>
+            <ScatterFile>.\board\linker_scripts\MIMXRT1052xxxxx_nor_sdram_txt_sdram.scf</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
             <Misc>--diag_suppress=L6314</Misc>
