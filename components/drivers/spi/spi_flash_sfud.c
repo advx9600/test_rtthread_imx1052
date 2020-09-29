@@ -575,9 +575,9 @@ static void sf(uint8_t argc, char **argv) {
         const char *operator = argv[1];
         uint32_t addr, size;
 
-        if (!strcmp(operator, "probe")) {
+        if (!rt_strcmp(operator, "probe")) {
             if (argc < 3) {
-                rt_kprintf("Usage: %s.\n", sf_help_info[CMD_PROBE_INDEX]);
+                rt_kprintf("Usage: %s.\n", sf_help_info[CMD_PROBE_INDEX]);						
             } else {
                 char *spi_dev_name = argv[2];
                 rtt_dev_bak = rtt_dev;
