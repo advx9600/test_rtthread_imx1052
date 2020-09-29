@@ -28,7 +28,7 @@
 
 #include "../inc/sfud.h"
 #include <string.h>
-
+#include <rtdevice.h>
 /* send dummy data for read data */
 #define DUMMY_DATA                               0xFF
 
@@ -671,7 +671,7 @@ __exit:
     if (spi->unlock) {
         spi->unlock(spi);
     }
-
+		//rt_kprintf("result:%d\n",result);
     return result;
 }
 
