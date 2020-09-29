@@ -35,3 +35,5 @@ ncscope.*
 #ctag files
 tags
 
+bsp/stm32
+.config

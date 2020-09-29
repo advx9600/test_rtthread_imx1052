@@ -27,12 +27,18 @@ menu "On-chip Peripheral Drivers"
 			config BSP_USING_SPI2
 				bool "bsp using spi2"
 				default n
-				
+			
+			if BSP_USING_SPI2
+				config BSP_USING_W25Q128
+				bool "use spi2 to control w25q"
+				default n
+			endif
+			
 			config BSP_USING_SPI3
 				bool "bsp using spi3"
 				default n
 		endif
-		
+	
     config BSP_USING_GPIO
         bool "Enable GPIO"
         select RT_USING_PIN
