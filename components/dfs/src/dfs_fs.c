@@ -16,6 +16,7 @@
 #include <dfs_file.h>
 #include "dfs_private.h"
 
+
 /**
  * @addtogroup FsApi
  */
@@ -43,7 +44,7 @@ int dfs_register(const struct dfs_filesystem_ops *ops)
         /* find out an empty filesystem type entry */
         if (*iter == NULL)
             (empty == NULL) ? (empty = iter) : 0;
-        else if (strcmp((*iter)->name, ops->name) == 0)
+        else if (rt_strcmp((*iter)->name, ops->name) == 0)
         {
             rt_set_errno(-EEXIST);
             ret = -1;
@@ -241,7 +242,7 @@ int dfs_mount(const char   *device_name,
 
     for (ops = &filesystem_operation_table[0];
             ops < &filesystem_operation_table[DFS_FILESYSTEM_TYPES_MAX]; ops++)
-        if ((*ops != NULL) && (strcmp((*ops)->name, filesystemtype) == 0))
+        if ((*ops != NULL) && (rt_strcmp((*ops)->name, filesystemtype) == 0))
             break;
 
     dfs_unlock();
@@ -269,7 +270,7 @@ int dfs_mount(const char   *device_name,
     }
 
     /* Check if the path exists or not, raw APIs call, fixme */
-    if ((strcmp(fullpath, "/") != 0) && (strcmp(fullpath, "/dev") != 0))
+    if ((rt_strcmp(fullpath, "/") != 0) && (rt_strcmp(fullpath, "/dev") != 0))
     {
         struct dfs_fd fd;
 
@@ -294,7 +295,7 @@ int dfs_mount(const char   *device_name,
         if (iter->ops == NULL)
             (fs == NULL) ? (fs = iter) : 0;
         /* check if the PATH is mounted */
-        else if (strcmp(iter->path, path) == 0)
+        else if (rt_strcmp(iter->path, path) == 0)
         {
             rt_set_errno(-EINVAL);
             goto err1;
@@ -381,7 +382,7 @@ int dfs_unmount(const char *specialfile)
             iter < &filesystem_table[DFS_FILESYSTEMS_MAX]; iter++)
     {
         /* check if the PATH is mounted */
-        if ((iter->path != NULL) && (strcmp(iter->path, fullpath) == 0))
+        if ((iter->path != NULL) && (rt_strcmp(iter->path, fullpath) == 0))
         {
             fs = iter;
             break;
@@ -447,7 +448,7 @@ int dfs_mkfs(const char *fs_name, const char *device_name)
     for (index = 0; index < DFS_FILESYSTEM_TYPES_MAX; index ++)
     {
         if (filesystem_operation_table[index] != NULL &&
-            strcmp(filesystem_operation_table[index]->name, fs_name) == 0)
+            rt_strcmp(filesystem_operation_table[index]->name, fs_name) == 0)
             break;
     }
     dfs_unlock();
@@ -532,7 +533,7 @@ int dfs_mount_device(rt_device_t dev)
   {
     if (mount_table[index].path == NULL) break;
     
-    if(strcmp(mount_table[index].device_name, dev->parent.name) == 0) {
+    if(rt_strcmp(mount_table[index].device_name, dev->parent.name) == 0) {
       if (dfs_mount(mount_table[index].device_name,
                     mount_table[index].path,
                     mount_table[index].filesystemtype,

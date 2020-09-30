@@ -11,6 +11,8 @@
 
 #include <rtdevice.h>
 #include "drv_gpio.h"
+#include "dfs_fs.h"
+
 /* defined the LED pin: GPIO1_IO9 */
 #define LED0_PIN               GET_PIN(1,9)
 
@@ -18,7 +20,21 @@ int main(void)
 {
     /* set LED0 pin mode to output */
     rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
-
+		
+	
+		if (dfs_mkfs("elm","W25Q128")){
+			rt_kprintf("dfs_mkfs failed\n");
+		}else{
+			rt_kprintf("dfs_mkfs success\n");
+		}
+		
+    /* ?? SFUD ?? spi10 ???,?? spi10 ??? flash ???????,?? W25Q128 */
+    if (0 == dfs_mount("W25Q128", "/","elm",0,0))
+    {
+				rt_kprintf("dfs_mount success\n");
+    };
+		
+		
     while (1)
     {
         rt_pin_write(LED0_PIN, PIN_HIGH);
