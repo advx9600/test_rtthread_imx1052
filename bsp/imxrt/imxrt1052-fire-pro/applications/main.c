@@ -12,16 +12,17 @@
 #include <rtdevice.h>
 #include "drv_gpio.h"
 #include "dfs_fs.h"
-
+#include "fal.h"
 /* defined the LED pin: GPIO1_IO9 */
 #define LED0_PIN               GET_PIN(1,9)
+#define FS_PARTITION_NAME			"abs"
 
 int main(void)
 {
     /* set LED0 pin mode to output */
     rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
 		
-	
+		#if 0
 		if (dfs_mkfs("elm","W25Q128")){
 			rt_kprintf("dfs_mkfs failed\n");
 		}else{
@@ -33,7 +34,34 @@ int main(void)
     {
 				rt_kprintf("dfs_mount success\n");
     };
+		#endif
 		
+		fal_init();
+		
+	
+		if (fal_mtd_nor_device_create(FS_PARTITION_NAME) == RT_NULL){
+			printf("create %s failed\n",FS_PARTITION_NAME);
+			return -1;
+		}
+		
+		if (dfs_mount(FS_PARTITION_NAME, "/", "lfs", 0, 0) == 0)
+		{
+				printf("Filesystem initialized!");
+		}
+		else
+		{
+				/* ??????? */
+				dfs_mkfs("lfs", FS_PARTITION_NAME);
+				/* ?? littlefs */
+				if (dfs_mount(FS_PARTITION_NAME, "/", "lfs", 0, 0) == 0)
+				{
+						printf("Filesystem initialized!");
+				}
+				else
+				{
+						printf("Failed to initialize filesystem!");
+				}
+		}
 		
     while (1)
     {
