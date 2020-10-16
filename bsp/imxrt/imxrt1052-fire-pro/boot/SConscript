@@ -1,4 +1,6 @@
 from building import *
+from hashlib import md5
+import os
 
 cwd = GetCurrentDir()
 
@@ -7,6 +9,13 @@ src = []
 CPPDEFINES=[]
 CPPPATH=[]
 
+def cmd(cmdstr):
+    #print(cmdstr)
+    os.system(cmdstr)
+    
+def copyfile(filename):
+    cmd("cp ../%s ../template.uvprojx"%filename)
+    
 if GetDepend('BSP_BOOT_NOR_SDRAM_TXT_SDRAM'):
     
     src += ['../board/xip/fire_imxrt1052_sdram_ini_dcd.c']
@@ -15,8 +24,12 @@ if GetDepend('BSP_BOOT_NOR_SDRAM_TXT_SDRAM'):
     
     CPPPATH = [cwd,cwd + '/../board/xip']
     CPPDEFINES = ['XIP_EXTERNAL_FLASH=1', 'XIP_BOOT_HEADER_ENABLE =1','XIP_BOOT_HEADER_DCD_ENABLE =1','USE_RAM_VECTOR_TABLE']
-        
     
-
+    copyfile('template_norsdram.uvprojx')
+elif GetDepend('BSP_BOOT_ITCM_SDRAM_DEBUG'):
+    copyfile('template_itcmsdram.uvprojx')
+else:
+    print("boot device wrong")
+    exit(0)
 group = DefineGroup('Boot', src, depend = [''], CPPPATH = CPPPATH, CPPDEFINES=CPPDEFINES)
 Return('group')
