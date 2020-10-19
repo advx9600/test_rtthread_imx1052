@@ -10,11 +10,12 @@ CPPDEFINES=[]
 CPPPATH=[]
 
 def cmd(cmdstr):
-    #print(cmdstr)
+    print(cmdstr)
     os.system(cmdstr)
     
 def copyfile(filename):
-    cmd("cp ../%s ../template.uvprojx"%filename)
+    cmd("cp ../%s.uvprojx ../template.uvprojx"%filename)
+    cmd("cp ../%s.uvoptx ../template.uvoptx"%filename)
     
 if GetDepend('BSP_BOOT_NOR_SDRAM_TXT_SDRAM'):
     
@@ -25,9 +26,9 @@ if GetDepend('BSP_BOOT_NOR_SDRAM_TXT_SDRAM'):
     CPPPATH = [cwd,cwd + '/../board/xip']
     CPPDEFINES = ['XIP_EXTERNAL_FLASH=1', 'XIP_BOOT_HEADER_ENABLE =1','XIP_BOOT_HEADER_DCD_ENABLE =1','USE_RAM_VECTOR_TABLE']
     
-    copyfile('template_norsdram.uvprojx')
-elif GetDepend('BSP_BOOT_ITCM_SDRAM_DEBUG'):
-    copyfile('template_itcmsdram.uvprojx')
+    copyfile('template_norsdram')
+elif GetDepend('BSP_BOOT_SDRAM_RAM_DEBUG'):
+    copyfile('template_sdramram')
 else:
     print("boot device wrong")
     exit(0)

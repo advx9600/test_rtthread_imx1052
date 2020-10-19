@@ -36,6 +36,8 @@ int main(void)
     };
 		#endif
 		
+		#if 1
+
 		fal_init();
 		
 	
@@ -62,6 +64,7 @@ int main(void)
 						printf("Failed to initialize filesystem!");
 				}
 		}
+		#endif
 		
     while (1)
     {

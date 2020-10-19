@@ -295,6 +295,10 @@ __Vectors_Size  EQU     __Vectors_End - __Vectors
                 AREA    |.text|, CODE, READONLY
 
 ; Reset Handler
+__iomx_gpr17_adr EQU 0x400AC044
+__flexram_bank_cfg EQU 0x55555FAA
+__flexram_itcm_size EQU 0x0
+__flexram_dtcm_size EQU 0x0
 
 Reset_Handler   PROC
                 EXPORT  Reset_Handler             [WEAK]

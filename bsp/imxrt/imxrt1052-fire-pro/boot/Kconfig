@@ -2,12 +2,12 @@ menu "Boot device config"
 
 	choice
 		prompt "boot media"
-		default BSP_BOOT_ITCM_SDRAM_DEBUG
+		default BSP_BOOT_SDRAM_RAM_DEBUG
 		
 		config BSP_BOOT_NOR_SDRAM_TXT_SDRAM
 			bool "boot from sdram after copy from nor flash"
 		
-		config BSP_BOOT_ITCM_SDRAM_DEBUG
+		config BSP_BOOT_SDRAM_RAM_DEBUG
 			bool "debug in itcm sdram"
 	endchoice
 	
