@@ -42,9 +42,13 @@
 #define NOR_CMD_LUT_SEQ_IDX_WRITESTATUSREG              10
 #define NOR_CMD_LUT_SEQ_IDX_READSTATUSREG               11
 #define NOR_CMD_LUT_SEQ_IDX_ERASECHIP                   12
-#define NOR_CMD_LUT_SEQ_IDX_AHB_PAGEPROGRAM_QUAD_1      13
-#define NOR_CMD_LUT_SEQ_IDX_AHB_PAGEPROGRAM_QUAD_2      14
-#define NOR_CMD_LUT_SEQ_IDX_READ_UUID_ISSI              15
+#define NOR_CMD_LUT_SEQ_IDX_ERASEBLOCK_32K              13
+#define NOR_CMD_LUT_SEQ_IDX_ERASEBLOCK_64K              14
+
+// RT1052 LUT 共有16个,多出的部分无效
+#define NOR_CMD_LUT_SEQ_IDX_AHB_PAGEPROGRAM_QUAD_1      16
+#define NOR_CMD_LUT_SEQ_IDX_AHB_PAGEPROGRAM_QUAD_2      16
+#define NOR_CMD_LUT_SEQ_IDX_READ_UUID_ISSI              16
 #define NOR_CMD_LUT_SEQ_IDX_READ_UUID_WB                16
 
 /* 查找表的长度 */
@@ -165,8 +169,15 @@ const uint32_t customLUT[CUSTOM_LUT_LENGTH] = {
         [4 * NOR_CMD_LUT_SEQ_IDX_ERASESECTOR] =
             FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_1PAD, W25Q_SectorErase_4Addr, 
                             kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, FLASH_ADDR_LENGTH),
-
-        /* SINGLE模式页写入，Page Program - single mode */
+				/* 擦除Block，Erase Block 64k */
+        [4 * NOR_CMD_LUT_SEQ_IDX_ERASEBLOCK_64K] =
+            FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_1PAD, 0xDC, 
+                            kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, FLASH_ADDR_LENGTH),
+        /* 擦除Block，Erase Block 32k */
+        [4 * NOR_CMD_LUT_SEQ_IDX_ERASEBLOCK_32K] =
+            FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_1PAD, 0x52, 
+                            kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 24),
+				/* SINGLE模式页写入，Page Program - single mode */
         [4 * NOR_CMD_LUT_SEQ_IDX_PAGEPROGRAM_SINGLE] =
             FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_1PAD, W25Q_PageProgram_4Addr, 
                             kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, FLASH_ADDR_LENGTH),
@@ -654,7 +665,7 @@ status_t FlexSPI_NorFlash_Enable_Quad_Mode(FLEXSPI_Type *base)
 * @param  dstAddr:要擦除扇区的起始地址
 * @retval FlexSPI传输返回的状态值，正常为0
 */
-status_t FlexSPI_NorFlash_Erase_Sector(FLEXSPI_Type *base, uint32_t dstAddr)
+status_t FlexSPI_NorFlash_Erase(FLEXSPI_Type *base, uint32_t dstAddr,uint32_t size)
 {
     status_t status;
     flexspi_transfer_t flashXfer;
@@ -672,8 +683,13 @@ status_t FlexSPI_NorFlash_Erase_Sector(FLEXSPI_Type *base, uint32_t dstAddr)
     flashXfer.port = kFLEXSPI_PortA1;
     flashXfer.cmdType = kFLEXSPI_Command;
     flashXfer.SeqNumber = 1;
-    flashXfer.seqIndex = NOR_CMD_LUT_SEQ_IDX_ERASESECTOR;
-    
+		if (size == 4096)
+			flashXfer.seqIndex = NOR_CMD_LUT_SEQ_IDX_ERASESECTOR;
+    else if (size == 32*1024)
+			flashXfer.seqIndex = NOR_CMD_LUT_SEQ_IDX_ERASEBLOCK_32K;
+		else if (size == 64*1024)
+			flashXfer.seqIndex = NOR_CMD_LUT_SEQ_IDX_ERASEBLOCK_64K;
+		
     status = FLEXSPI_TransferBlocking(base, &flashXfer);
 
     if (status != kStatus_Success)

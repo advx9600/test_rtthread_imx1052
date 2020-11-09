@@ -25,15 +25,8 @@ int main(void)
     rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
 		
 		#if 1
-		FlexSPI_NorFlash_Init();
-		uint32_t i = 0;
-    status_t status;
-    uint8_t uuid[16];
-    uint32_t JedecDeviceID = 0;
-
-    PRINTF("\r\nNorFlash IP√¸¡Ó∑√Œ ≤‚ ‘\r\n");
-		FlexSPI_NorFlash_Get_JedecDevice_ID(FLEXSPI, &JedecDeviceID);
-		PRINTF("ºÏ≤‚µΩFLASH–æ∆¨£¨JedecDeviceID÷µŒ™: 0x%x\r\n", JedecDeviceID); 
+		
+		
 		#endif
 	
 		#if 0
@@ -50,34 +43,34 @@ int main(void)
     };
 		#endif
 		
-		#if 0
+		#if 1
 
 		fal_init();
-		
-	
-		if (fal_mtd_nor_device_create(FS_PARTITION_NAME) == RT_NULL){
-			printf("create %s failed\n",FS_PARTITION_NAME);
-			return -1;
-		}
-		
-		if (dfs_mount(FS_PARTITION_NAME, "/", "lfs", 0, 0) == 0)
-		{
-				printf("Filesystem initialized!");
-		}
-		else
-		{
-				/* ??????? */
-				dfs_mkfs("lfs", FS_PARTITION_NAME);
-				/* ?? littlefs */
-				if (dfs_mount(FS_PARTITION_NAME, "/", "lfs", 0, 0) == 0)
-				{
-						printf("Filesystem initialized!");
-				}
-				else
-				{
-						printf("Failed to initialize filesystem!");
-				}
-		}
+//		char* cmd1="fal probe abs";
+//		msh_exec(cmd1,strlen(cmd1));
+//		char* cmd2="fal bench 4096 yes";
+//		msh_exec(cmd2,strlen(cmd2));
+
+//		dfs_mkfs("lfs", FS_PARTITION_NAME);
+				
+//		if (dfs_mount(FS_PARTITION_NAME, "/", "lfs", 0, 0) == 0)
+//		{
+//				printf("Filesystem initialized!");
+//		}
+//		else
+//		{
+//				/* ??????? */
+//				dfs_mkfs("lfs", FS_PARTITION_NAME);
+//				/* ?? littlefs */
+//				if (dfs_mount(FS_PARTITION_NAME, "/", "lfs", 0, 0) == 0)
+//				{
+//						printf("Filesystem initialized!");
+//				}
+//				else
+//				{
+//						printf("Failed to initialize filesystem!");
+//				}
+//		}
 		#endif
 		
     while (1)

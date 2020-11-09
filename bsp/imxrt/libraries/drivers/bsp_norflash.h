@@ -11,7 +11,7 @@
 /* FLASH相关特性 */
 #define FLASH_SIZE          (32*1024)  /* 单位为KByte,256Mb = 32768KByte */
 #define FLASH_PAGE_SIZE     256     /* 页大小 */
-#define SECTOR_SIZE         (4*1024)  /* 扇区大小4K */
+//#define SECTOR_SIZE         (4*1024)  /* 扇区大小4K */
 
 /* 使用的FLASH地址宽度，单位：bit */
 #define FLASH_ADDR_LENGTH    32              
@@ -117,7 +117,7 @@ void FlexSPI_NorFlash_Init(void);
 status_t FlexSPI_NorFlash_Get_JedecDevice_ID(FLEXSPI_Type *base, uint32_t *vendorID);
 status_t FlexSPI_NorFlash_Get_Device_ID(FLEXSPI_Type *base, uint8_t *vendorID);
 status_t FlexSPI_NorFlash_Write_Enable(FLEXSPI_Type *base);
-status_t FlexSPI_NorFlash_Erase_Sector(FLEXSPI_Type *base, uint32_t dstAddr);
+status_t FlexSPI_NorFlash_Erase(FLEXSPI_Type *base, uint32_t dstAddr,uint32_t size);
 status_t FlexSPI_NorFlash_Wait_Bus_Busy(FLEXSPI_Type *base);
 status_t FlexSPI_NorFlash_Write_Status_Register(FLEXSPI_Type *base, uint8_t *config);
 status_t FlexSPI_NorFlash_Read_Status_Register(FLEXSPI_Type *base, uint8_t *SR_value);	 

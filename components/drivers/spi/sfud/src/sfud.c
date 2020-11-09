@@ -29,6 +29,7 @@
 #include "../inc/sfud.h"
 #include <string.h>
 #include <rtdevice.h>
+#include "bsp_norflash.h"
 /* send dummy data for read data */
 #define DUMMY_DATA                               0xFF
 
