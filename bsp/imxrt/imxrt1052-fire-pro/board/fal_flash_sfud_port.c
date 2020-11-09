@@ -50,19 +50,50 @@ struct fal_flash_dev nor_flash0 =
     .ops        = {init, read, write, erase},
     .write_gran = 1
 };
+static struct rt_mutex static_mutex;
+
+static int lock_init()
+{
+	rt_err_t result;
+
+    /* 初始化静态互斥量 */
+    result = rt_mutex_init(&static_mutex, "smutex", RT_IPC_FLAG_FIFO);
+    if (result != RT_EOK)
+    {
+        log_e("init static mutex failed.\n");
+        return -1;
+    }
+		return 0;
+}
+static void lock_spi()
+{
+	rt_err_t  result = rt_mutex_take(&static_mutex, RT_WAITING_FOREVER);	
+	if (result != RT_EOK)
+	{
+		log_e("lock spi failed\n");
+	}
+}
+
+static void unlock_spi()
+{
+	rt_mutex_release(&static_mutex);
+}
 
 static int init(void)
 {
     /* update the flash chip information */
     nor_flash0.blk_size = 1024*4;
     nor_flash0.len = 1024*1024*32;
+		lock_init();
 	
-		FlexSPI_NorFlash_Init();		
+		lock_spi();
+		FlexSPI_NorFlash_Init();
     uint32_t JedecDeviceID = 0;
     
 		FlexSPI_NorFlash_Get_JedecDevice_ID(FLEXSPI, &JedecDeviceID);
 		log_i("检测到FLASH芯片，JedecDeviceID值为: 0x%x\r\n", JedecDeviceID);
-    
+    unlock_spi();
+	
 		return 0;
 }
 
@@ -73,12 +104,15 @@ static int read(long offset, uint8_t *buf, size_t size)
 //    sfud_read(sfud_dev, nor_flash0.addr + offset, size, buf);
 //		log_d("read  offset:%d,size:%d\n",offset,size);
 		status_t status;
+		lock_spi();
 		status = FlexSPI_NorFlash_Buffer_Read(FLEXSPI,offset,buf,size);
     if (status != kStatus_Success)
-		{			
+		{
+				unlock_spi();
 				log_e("读取数据失败 !\r\n");
 				return -1;
 		}		
+		unlock_spi();
 		return size;
 }
 
@@ -91,12 +125,16 @@ static int write(long offset, const uint8_t *buf, size_t size)
 //    {
 //        return -1;
 //    }
+		
+		lock_spi();
 		status_t status = FlexSPI_NorFlash_Buffer_Program(FLEXSPI,offset,(uint8_t *)buf,size);
 		if (status != kStatus_Success)
 		{			
+				unlock_spi();
 				log_e("写入数据失败 !\r\n");
 				return -1;
 		}
+		unlock_spi();
     return size;
 }
 
@@ -120,13 +158,15 @@ static int erase(long offset, size_t size)
 				erase_size = 4*1024;
 			}
 			
+			lock_spi();
 			status_t status = FlexSPI_NorFlash_Erase(FLEXSPI,offset+total_erase_size,erase_size);
 			if (status != kStatus_Success)
-			{			
+			{
+					unlock_spi();
 					log_e("写入数据失败 !\r\n");
 					return -1;
 			}
-			
+			unlock_spi();
 			total_erase_size += erase_size;
 		}
 		

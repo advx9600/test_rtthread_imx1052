@@ -46,31 +46,30 @@ int main(void)
 		#if 1
 
 		fal_init();
-//		char* cmd1="fal probe abs";
-//		msh_exec(cmd1,strlen(cmd1));
-//		char* cmd2="fal bench 4096 yes";
-//		msh_exec(cmd2,strlen(cmd2));
+		
+		if (fal_mtd_nor_device_create(FS_PARTITION_NAME) == RT_NULL){
+			printf("create %s failed\n",FS_PARTITION_NAME);
+			return -1;
+		}
 
-//		dfs_mkfs("lfs", FS_PARTITION_NAME);
-				
-//		if (dfs_mount(FS_PARTITION_NAME, "/", "lfs", 0, 0) == 0)
-//		{
-//				printf("Filesystem initialized!");
-//		}
-//		else
-//		{
-//				/* ??????? */
-//				dfs_mkfs("lfs", FS_PARTITION_NAME);
-//				/* ?? littlefs */
-//				if (dfs_mount(FS_PARTITION_NAME, "/", "lfs", 0, 0) == 0)
-//				{
-//						printf("Filesystem initialized!");
-//				}
-//				else
-//				{
-//						printf("Failed to initialize filesystem!");
-//				}
-//		}
+		if (dfs_mount(FS_PARTITION_NAME, "/", "lfs", 0, 0) == 0)
+		{
+				printf("Filesystem initialized!");
+		}
+		else
+		{
+				/* ??????? */
+				dfs_mkfs("lfs", FS_PARTITION_NAME);
+				/* ?? littlefs */
+				if (dfs_mount(FS_PARTITION_NAME, "/", "lfs", 0, 0) == 0)
+				{
+						printf("Filesystem initialized!");
+				}
+				else
+				{
+						printf("Failed to initialize filesystem!");
+				}
+		}
 		#endif
 		
     while (1)
