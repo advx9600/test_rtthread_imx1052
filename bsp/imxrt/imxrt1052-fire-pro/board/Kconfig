@@ -17,6 +17,12 @@ menu "On-chip Peripheral Drivers"
 		config BSP_USING_FLEXSPI
 			bool "bsp using flexspi"
 			default n
+			
+		if BSP_USING_FLEXSPI
+			config BSP_USING_FLEXSPI_NORFLASH
+				bool "bsp using flexspi norflash"
+				default n
+		endif
 	endif
 	
     menuconfig BSP_USING_SPI

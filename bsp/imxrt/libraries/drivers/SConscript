@@ -22,6 +22,9 @@ if GetDepend('BSP_USING_RTC'):
 if GetDepend('BSP_USING_FLEXSPI'):
     src += ['fsl_flexspi.c']
     
+if GetDepend('BSP_USING_FLEXSPI_NORFLASH'):
+    src += ['bsp_norflash.c']
+    
 if  GetDepend('BSP_USING_SPI'):
     src += ['drv_spi.c']
 

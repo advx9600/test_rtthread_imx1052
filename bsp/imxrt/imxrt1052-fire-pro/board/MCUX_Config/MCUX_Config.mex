@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding= "UTF-8" ?>
-<configuration name="IMXRT1050-EVKB" version="1.5" xsi:schemaLocation="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.5 http://mcuxpresso.nxp.com/XSD/mex_configuration_1.5.xsd" uuid="789fd1d3-821c-40a6-b04d-44ccc5a5d158" xmlns="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<configuration name="IMXRT1050-EVKB" xsi:schemaLocation="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.8 http://mcuxpresso.nxp.com/XSD/mex_configuration_1.8.xsd" uuid="789fd1d3-821c-40a6-b04d-44ccc5a5d158" version="1.8" xmlns="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <common>
       <processor>MIMXRT1052xxxxB</processor>
       <package>MIMXRT1052DVL6B</package>
@@ -14,11 +14,12 @@
    <preferences>
       <validate_boot_init_only>false</validate_boot_init_only>
       <generate_extended_information>false</generate_extended_information>
+      <generate_code_modified_registers_only>false</generate_code_modified_registers_only>
    </preferences>
    <tools>
-      <pins name="Pins" version="5.0" enabled="true" update_project_code="true">
+      <pins name="Pins" version="8.0" enabled="true" update_project_code="true">
          <pins_profile>
-            <processor_version>5.0.2</processor_version>
+            <processor_version>8.0.2</processor_version>
             <power_domains/>
             <pin_labels>
                <pin_label pin_num="G11" pin_signal="GPIO_AD_B0_03" label="BSP_BEEP"/>
@@ -105,9 +106,9 @@
             </function>
          </functions_list>
       </pins>
-      <clocks name="Clocks" version="5.0" enabled="true" update_project_code="true">
+      <clocks name="Clocks" version="7.0" enabled="true" update_project_code="true">
          <clocks_profile>
-            <processor_version>5.0.2</processor_version>
+            <processor_version>8.0.2</processor_version>
          </clocks_profile>
          <clock_configurations>
             <clock_configuration name="BOARD_BootClockRUN">
@@ -154,14 +155,18 @@
                         <data>OUTPUT</data>
                      </feature>
                   </dependency>
-                  <dependency resourceType="SWComponent" resourceId="platform.drivers.common" description="Clocks initialization requires the COMMON Driver in the project." problem_level="2" source="Clocks.BOARD_BootClockRUN">
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.common" description="Clocks initialization requires the COMMON Driver in the project." problem_level="2" source="Clocks:BOARD_BootClockRUN">
+                     <feature name="enabled" evaluation="equal" configuration="core0">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.iomuxc" description="Clocks initialization requires the IOMUXC Driver in the project." problem_level="2" source="Clocks:BOARD_BootClockRUN">
                      <feature name="enabled" evaluation="equal" configuration="core0">
                         <data>true</data>
                      </feature>
                   </dependency>
                </dependencies>
                <clock_sources>
-                  <clock_source id="XTALOSC24M.OSC.outFreq" value="24 MHz" locked="false" enabled="true"/>
                   <clock_source id="XTALOSC24M.RTC_OSC.outFreq" value="32.768 kHz" locked="false" enabled="true"/>
                </clock_sources>
                <clock_outputs>
@@ -176,7 +181,7 @@
                   <clock_output id="ENET_25M_REF_CLK.outFreq" value="1.2 MHz" locked="false" accuracy=""/>
                   <clock_output id="FLEXIO1_CLK_ROOT.outFreq" value="30 MHz" locked="false" accuracy=""/>
                   <clock_output id="FLEXIO2_CLK_ROOT.outFreq" value="30 MHz" locked="false" accuracy=""/>
-                  <clock_output id="FLEXSPI_CLK_ROOT.outFreq" value="2880/11 MHz" locked="false" accuracy=""/>
+                  <clock_output id="FLEXSPI_CLK_ROOT.outFreq" value="1440/11 MHz" locked="false" accuracy=""/>
                   <clock_output id="GPT1_ipg_clk_highfreq.outFreq" value="75 MHz" locked="false" accuracy=""/>
                   <clock_output id="GPT2_ipg_clk_highfreq.outFreq" value="75 MHz" locked="false" accuracy=""/>
                   <clock_output id="IPG_CLK_ROOT.outFreq" value="150 MHz" locked="false" accuracy=""/>
@@ -207,7 +212,7 @@
                <clock_settings>
                   <setting id="CCM.AHB_PODF.scale" value="1" locked="true"/>
                   <setting id="CCM.ARM_PODF.scale" value="2" locked="true"/>
-                  <setting id="CCM.FLEXSPI_PODF.scale" value="1" locked="true"/>
+                  <setting id="CCM.FLEXSPI_PODF.scale" value="2" locked="true"/>
                   <setting id="CCM.FLEXSPI_SEL.sel" value="CCM_ANALOG.PLL3_PFD0_CLK" locked="false"/>
                   <setting id="CCM.LCDIF_PODF.scale" value="8" locked="true"/>
                   <setting id="CCM.LCDIF_PRED.scale" value="7" locked="true"/>
@@ -244,52 +249,43 @@
             </clock_configuration>
          </clock_configurations>
       </clocks>
-      <periphs name="Peripherals" version="5.0" enabled="true" update_project_code="true">
+      <dcdx name="DCDx" version="3.0" enabled="false" update_project_code="true">
+         <dcdx_profile>
+            <processor_version>N/A</processor_version>
+         </dcdx_profile>
+         <dcdx_configurations/>
+      </dcdx>
+      <periphs name="Peripherals" version="8.0" enabled="true" update_project_code="true">
          <dependencies>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.lpuart" description="在工具链/IDE工程中未发现LPUART Driver。" problem_level="2" source="Peripherals">
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.lpi2c" description="工具链/IDE工程中未找到LPI2C Driver。工程不会被编译！" problem_level="2" source="Peripherals">
                <feature name="enabled" evaluation="equal">
                   <data type="Boolean">true</data>
                </feature>
             </dependency>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.lpuart" description="工具链/IDE工程中LPUART Driver不被支持的版本。需要：${required_value}，实际：${actual_value}。" problem_level="1" source="Peripherals">
-               <feature name="version" evaluation="equivalent">
-                  <data type="Version">2.2.4</data>
-               </feature>
-            </dependency>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.lpi2c" description="在工具链/IDE工程中未发现LPI2C Driver。" problem_level="2" source="Peripherals">
-               <feature name="enabled" evaluation="equal">
-                  <data type="Boolean">true</data>
-               </feature>
-            </dependency>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.lpi2c" description="工具链/IDE工程中LPI2C Driver不被支持的版本。需要：${required_value}，实际：${actual_value}。" problem_level="1" source="Peripherals">
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.lpi2c" description="工具链/IDE工程不支持LPI2C Driver版本。所需值: ${required_value}, 实际值: ${actual_value}. 工程可能没有被正确编译。" problem_level="1" source="Peripherals">
                <feature name="version" evaluation="equivalent">
                   <data type="Version">2.1.5</data>
                </feature>
             </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.lpuart" description="工具链/IDE工程中未找到LPUART Driver。工程不会被编译！" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.lpuart" description="工具链/IDE工程不支持LPUART Driver版本。所需值: ${required_value}, 实际值: ${actual_value}. 工程可能没有被正确编译。" problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">2.2.4</data>
+               </feature>
+            </dependency>
          </dependencies>
          <peripherals_profile>
-            <processor_version>5.0.2</processor_version>
+            <processor_version>8.0.2</processor_version>
          </peripherals_profile>
          <functional_groups>
             <functional_group name="BOARD_InitPeripherals" uuid="a7525270-2da6-4556-8d91-4ab9d0edc0e2" called_from_default_init="true" id_prefix="" core="core0">
                <description></description>
                <options/>
                <dependencies>
-                  <dependency resourceType="ClockOutput" resourceId="UART_CLK_ROOT" description="UART_CLK_ROOT is inactive." problem_level="2" source="Peripherals:BOARD_InitPeripherals">
-                     <feature name="frequency" evaluation="greaterThan">
-                        <data type="Frequency" unit="Hz">0</data>
-                     </feature>
-                  </dependency>
-                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="LPUART1.uart_tx" description="Signal TX of the peripheral LPUART1 is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
-                     <feature name="routed" evaluation="equal">
-                        <data type="Boolean">true</data>
-                     </feature>
-                  </dependency>
-                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="LPUART1.uart_rx" description="Signal RX of the peripheral LPUART1 is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
-                     <feature name="routed" evaluation="equal">
-                        <data type="Boolean">true</data>
-                     </feature>
-                  </dependency>
                   <dependency resourceType="ClockOutput" resourceId="LPI2C_CLK_ROOT" description="LPI2C_CLK_ROOT is inactive." problem_level="2" source="Peripherals:BOARD_InitPeripherals">
                      <feature name="frequency" evaluation="greaterThan">
                         <data type="Frequency" unit="Hz">0</data>
@@ -302,6 +298,21 @@
                   </dependency>
                   <dependency resourceType="PeripheralUnifiedSignal" resourceId="LPI2C1.lpi2c_sda" description="Signal serial data of the peripheral LPI2C1 is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
                      <feature name="routed" evaluation="">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="ClockOutput" resourceId="UART_CLK_ROOT" description="UART_CLK_ROOT is inactive." problem_level="2" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="frequency" evaluation="greaterThan">
+                        <data type="Frequency" unit="Hz">0</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="LPUART1.uart_tx" description="Signal TX of the peripheral LPUART1 is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="LPUART1.uart_rx" description="Signal RX of the peripheral LPUART1 is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
                         <data type="Boolean">true</data>
                      </feature>
                   </dependency>
@@ -337,36 +348,15 @@
                   </dependency>
                </dependencies>
                <instances>
-                  <instance name="LPUART_1" type="lpuart" type_id="lpuart_bebe3e12b6ec22bbd14199038f2bf459" mode="polling" peripheral="LPUART1" enabled="true">
-                     <config_set name="lpuartConfig_t" quick_selection="QuickSelection1">
-                        <struct name="lpuartConfig">
-                           <setting name="clockSource" value="LpuartClock"/>
-                           <setting name="lpuartSrcClkFreq" value="BOARD_BootClockRUN"/>
-                           <setting name="baudRate_Bps" value="115200"/>
-                           <setting name="parityMode" value="kLPUART_ParityDisabled"/>
-                           <setting name="dataBitsCount" value="kLPUART_EightDataBits"/>
-                           <setting name="isMsb" value="false"/>
-                           <setting name="stopBitCount" value="kLPUART_OneStopBit"/>
-                           <setting name="txFifoWatermark" value="0"/>
-                           <setting name="rxFifoWatermark" value="1"/>
-                           <setting name="enableRxRTS" value="false"/>
-                           <setting name="enableTxCTS" value="false"/>
-                           <setting name="txCtsSource" value="kLPUART_CtsSourcePin"/>
-                           <setting name="txCtsConfig" value="kLPUART_CtsSampleAtStart"/>
-                           <setting name="rxIdleType" value="kLPUART_IdleTypeStartBit"/>
-                           <setting name="rxIdleConfig" value="kLPUART_IdleCharacter1"/>
-                           <setting name="enableTx" value="true"/>
-                           <setting name="enableRx" value="true"/>
-                        </struct>
-                     </config_set>
-                  </instance>
-                  <instance name="LPI2C_1" type="lpi2c" type_id="lpi2c_db68d4f4f06a22e25ab51fe9bd6db4d2" mode="master" peripheral="LPI2C1" enabled="true">
+                  <instance name="LPI2C_1" uuid="22f9d81b-44e9-4cba-bd01-03acb61bc360" type="lpi2c" type_id="lpi2c_db68d4f4f06a22e25ab51fe9bd6db4d2" mode="master" peripheral="LPI2C1" enabled="true" comment="" custom_name_enabled="true">
                      <config_set name="main" quick_selection="qs_interrupt">
                         <setting name="clockSource" value="Lpi2cClock"/>
                         <setting name="clockSourceFreq" value="BOARD_BootClockRUN"/>
                         <struct name="interrupt">
                            <setting name="IRQn" value="LPI2C1_IRQn"/>
+                           <setting name="enable_interrrupt" value="enabled"/>
                            <setting name="enable_priority" value="false"/>
+                           <setting name="priority" value="0"/>
                            <setting name="enable_custom_name" value="false"/>
                         </struct>
                      </config_set>
@@ -388,6 +378,9 @@
                               <setting name="source" value="kLPI2C_HostRequestExternalPin"/>
                               <setting name="polarity" value="kLPI2C_HostRequestPinActiveHigh"/>
                            </struct>
+                           <set name="edmaRequestSources">
+                              <selected/>
+                           </set>
                         </struct>
                         <struct name="transfer">
                            <setting name="blocking" value="false"/>
@@ -406,7 +399,7 @@
                         </struct>
                      </config_set>
                   </instance>
-                  <instance name="LPUART_2" type="lpuart" type_id="lpuart_bebe3e12b6ec22bbd14199038f2bf459" mode="polling" peripheral="LPUART2" enabled="true">
+                  <instance name="LPUART_1" uuid="a36a15e6-ddcb-4a59-9a78-850053cb734b" type="lpuart" type_id="lpuart_bebe3e12b6ec22bbd14199038f2bf459" mode="polling" peripheral="LPUART1" enabled="true" comment="" custom_name_enabled="true">
                      <config_set name="lpuartConfig_t" quick_selection="QuickSelection1">
                         <struct name="lpuartConfig">
                            <setting name="clockSource" value="LpuartClock"/>
@@ -429,7 +422,30 @@
                         </struct>
                      </config_set>
                   </instance>
-                  <instance name="LPUART_3" type="lpuart" type_id="lpuart_bebe3e12b6ec22bbd14199038f2bf459" mode="polling" peripheral="LPUART5" enabled="true">
+                  <instance name="LPUART_2" uuid="4b7daa44-486d-4e1e-b510-18f0b088a5cc" type="lpuart" type_id="lpuart_bebe3e12b6ec22bbd14199038f2bf459" mode="polling" peripheral="LPUART2" enabled="true" comment="" custom_name_enabled="true">
+                     <config_set name="lpuartConfig_t" quick_selection="QuickSelection1">
+                        <struct name="lpuartConfig">
+                           <setting name="clockSource" value="LpuartClock"/>
+                           <setting name="lpuartSrcClkFreq" value="BOARD_BootClockRUN"/>
+                           <setting name="baudRate_Bps" value="115200"/>
+                           <setting name="parityMode" value="kLPUART_ParityDisabled"/>
+                           <setting name="dataBitsCount" value="kLPUART_EightDataBits"/>
+                           <setting name="isMsb" value="false"/>
+                           <setting name="stopBitCount" value="kLPUART_OneStopBit"/>
+                           <setting name="txFifoWatermark" value="0"/>
+                           <setting name="rxFifoWatermark" value="1"/>
+                           <setting name="enableRxRTS" value="false"/>
+                           <setting name="enableTxCTS" value="false"/>
+                           <setting name="txCtsSource" value="kLPUART_CtsSourcePin"/>
+                           <setting name="txCtsConfig" value="kLPUART_CtsSampleAtStart"/>
+                           <setting name="rxIdleType" value="kLPUART_IdleTypeStartBit"/>
+                           <setting name="rxIdleConfig" value="kLPUART_IdleCharacter1"/>
+                           <setting name="enableTx" value="true"/>
+                           <setting name="enableRx" value="true"/>
+                        </struct>
+                     </config_set>
+                  </instance>
+                  <instance name="LPUART_3" uuid="6fe020d8-67fb-405e-a1c5-4116ba4cd30a" type="lpuart" type_id="lpuart_bebe3e12b6ec22bbd14199038f2bf459" mode="polling" peripheral="LPUART5" enabled="true" comment="" custom_name_enabled="true">
                      <config_set name="lpuartConfig_t" quick_selection="QuickSelection1">
                         <struct name="lpuartConfig">
                            <setting name="clockSource" value="LpuartClock"/>
@@ -456,11 +472,30 @@
             </functional_group>
          </functional_groups>
          <components>
-            <component name="system" type_id="system_54b53072540eeeb8f8e9343e71f28176">
-               <config_set_global name="global_system_definitions"/>
+            <component name="system" uuid="61c01add-1146-4201-923b-779a1a5ec39e" type_id="system_54b53072540eeeb8f8e9343e71f28176">
+               <config_set_global name="global_system_definitions">
+                  <setting name="user_definitions" value=""/>
+                  <setting name="user_includes" value=""/>
+               </config_set_global>
+            </component>
+            <component name="msg" uuid="23797d2f-06b7-4b5a-bb87-bc0fe0d8c569" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
+               <config_set_global name="global_messages"/>
+            </component>
+            <component name="generic_uart" uuid="d17759ef-7cae-4a55-885a-e03e5edde6c1" type_id="generic_uart_8cae00565451cf2346eb1b8c624e73a6">
+               <config_set_global name="global_uart"/>
+            </component>
+            <component name="generic_can" uuid="822d2908-d40c-45c2-ae16-96b1ae910702" type_id="generic_can_1bfdd78b1af214566c1f23cf6a582d80">
+               <config_set_global name="global_can"/>
             </component>
          </components>
       </periphs>
+      <tee name="TEE" version="2.0" enabled="false" update_project_code="true">
+         <tee_profile>
+            <processor_version>N/A</processor_version>
+         </tee_profile>
+         <global_options/>
+         <user_memory_regions/>
+      </tee>
       <common name="common" version="1.0" enabled="true" update_project_code="true">
          <core name="core0" role="primary" project_name="Project"/>
       </common>

@@ -13,15 +13,29 @@
 #include "drv_gpio.h"
 #include "dfs_fs.h"
 #include "fal.h"
+#include "bsp_norflash.h"
 /* defined the LED pin: GPIO1_IO9 */
 #define LED0_PIN               GET_PIN(1,9)
 #define FS_PARTITION_NAME			"abs"
 
+#define PRINTF rt_kprintf
 int main(void)
 {
     /* set LED0 pin mode to output */
     rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
 		
+		#if 1
+		FlexSPI_NorFlash_Init();
+		uint32_t i = 0;
+    status_t status;
+    uint8_t uuid[16];
+    uint32_t JedecDeviceID = 0;
+
+    PRINTF("\r\nNorFlash IP√¸¡Ó∑√Œ ≤‚ ‘\r\n");
+		FlexSPI_NorFlash_Get_JedecDevice_ID(FLEXSPI, &JedecDeviceID);
+		PRINTF("ºÏ≤‚µΩFLASH–æ∆¨£¨JedecDeviceID÷µŒ™: 0x%x\r\n", JedecDeviceID); 
+		#endif
+	
 		#if 0
 		if (dfs_mkfs("elm","W25Q128")){
 			rt_kprintf("dfs_mkfs failed\n");
@@ -36,7 +50,7 @@ int main(void)
     };
 		#endif
 		
-		#if 1
+		#if 0
 
 		fal_init();
 		

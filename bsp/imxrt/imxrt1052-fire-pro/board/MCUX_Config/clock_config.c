@@ -235,7 +235,7 @@ void BOARD_BootClockRUN(void)
     /* Disable Flexspi clock gate. */
     CLOCK_DisableClock(kCLOCK_FlexSpi);
     /* Set FLEXSPI_PODF. */
-    CLOCK_SetDiv(kCLOCK_FlexspiDiv, 0);
+    CLOCK_SetDiv(kCLOCK_FlexspiDiv, 1);
     /* Set Flexspi clock source. */
     CLOCK_SetMux(kCLOCK_FlexspiMux, 3);
 #endif
