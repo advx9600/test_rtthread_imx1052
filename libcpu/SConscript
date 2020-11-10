@@ -12,4 +12,6 @@ list  = os.listdir(cwd)
 if rtconfig.ARCH in list:
     group = group + SConscript(os.path.join(rtconfig.ARCH, 'SConscript'))
 
+group += DefineGroup('cpu', ['cpuusage.c'], depend = [''], CPPPATH = [cwd])
+
 Return('group')
