@@ -92,7 +92,7 @@ extern const uint32_t customLUT[CUSTOM_LUT_LENGTH];
  ******************************************************************************/
 /* 设备特性相关的参数 */
 flexspi_device_config_t deviceconfig = {
-    .flexspiRootClk = 120000000,
+    .flexspiRootClk = 130000000,
     .flashSize = FLASH_SIZE,
     .CSIntervalUnit = kFLEXSPI_CsIntervalUnit1SckCycle,
     .CSInterval = 2,
