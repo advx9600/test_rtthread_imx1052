@@ -15,7 +15,7 @@
 #include "fal.h"
 #include "bsp_norflash.h"
 /* defined the LED pin: GPIO1_IO9 */
-#define LED0_PIN               GET_PIN(1,9)
+#define LED0_PIN               GET_PIN(1,24)
 #define FS_PARTITION_NAME			"abs"
 
 #define PRINTF rt_kprintf
@@ -24,9 +24,8 @@ int main(void)
     /* set LED0 pin mode to output */
     rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
 		
-		#if 1
-		
-		
+		#if 0	
+		rt_eth_test();
 		#endif
 	
 		#if 0
