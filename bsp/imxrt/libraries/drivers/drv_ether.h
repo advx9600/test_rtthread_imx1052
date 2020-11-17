@@ -9,4 +9,7 @@
 #include "fsl_iomuxc.h"
 #include "fsl_gpio.h"
 
+rt_err_t rt_eth_init1(void);
+
+
 #endif

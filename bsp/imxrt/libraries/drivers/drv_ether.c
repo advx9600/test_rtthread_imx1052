@@ -1,7 +1,7 @@
 #include "drv_ether.h"
 #include "fsl_phy.h"
 
-#define PRINTF printf
+#define PRINTF rt_kprintf
 static void gpio_config(void)
 {
 	// Ω” ’
@@ -39,8 +39,66 @@ static void gpio_config(void)
 	IOMUXC_SetPinMux(
       IOMUXC_GPIO_B1_15_ENET_MDIO,            /* 12 */
       0U);
-			
-			
+	
+
+
+			/* reset */
+  gpio_pin_config_t gpio1_pinF14_config = {
+      .direction = kGPIO_DigitalOutput,
+      .outputLogic = 0U,
+      .interruptMode = kGPIO_NoIntmode
+  };
+  /* Initialize GPIO functionality on GPIO_AD_B0_09 (pin F14) */
+  GPIO_PinInit(GPIO1, 9U, &gpio1_pinF14_config);
+	 IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B0_09_GPIO1_IO09,        /* GPIO_AD_B0_09 is configured as GPIO1_IO09 */
+      0U);
+
+	
+		// nINT 1 output
+	IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B0_09_GPIO1_IO09,        /* GPIO_AD_B0_09 is configured as GPIO1_IO09 */
+      0U); 
+	
+ gpio_pin_config_t gpio1_pinF15_config = {
+      .direction = kGPIO_DigitalOutput,
+      .outputLogic = 1U,
+      .interruptMode = kGPIO_NoIntmode
+  };
+  
+  GPIO_PinInit(GPIO1, 9U, &gpio1_pinF15_config);
+
+	
+	IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_B1_04_ENET_RX_DATA00,             /* GPIO_B1_14 PAD functional properties : */
+      0x10B1U);
+	IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_B1_05_ENET_RX_DATA01,             /* GPIO_B1_14 PAD functional properties : */
+      0x10B1U);
+	IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_B1_06_ENET_RX_EN,             /* GPIO_B1_14 PAD functional properties : */
+      0x10B1U);
+	IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_B1_07_ENET_TX_DATA00,             /* GPIO_B1_14 PAD functional properties : */
+      0x10B1U);
+	IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_B1_08_ENET_TX_DATA01,             /* GPIO_B1_14 PAD functional properties : */
+      0x10B1U);
+	IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_B1_09_ENET_TX_EN,             /* GPIO_B1_14 PAD functional properties : */
+      0x10B1U);
+			IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_B1_11_ENET_RX_ER,             /* GPIO_B1_14 PAD functional properties : */
+      0x10B1U);
+			IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_B1_10_ENET_REF_CLK,             /* GPIO_B1_14 PAD functional properties : */
+      0x10B1U);
+			IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_AD_B1_04_ENET_MDC,             /* GPIO_B1_14 PAD functional properties : */
+      0x10B1U);
+			IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_B1_15_ENET_MDIO,             /* GPIO_B1_14 PAD functional properties : */
+      0x10B1U);
 }
 static void clk_config(void)
 {
@@ -67,12 +125,6 @@ static void delay_10ms(uint32_t times)
 		rt_thread_mdelay(10*times);
 }
 
-rt_err_t rt_eth_init()
-{
-	
-	return 0;
-}
-
 rt_err_t rt_eth_test()
 {
 	gpio_config();
@@ -95,5 +147,30 @@ rt_err_t rt_eth_test()
 		}
 		
 		PHY_Write((ENET_Type*)0x402D8000,0,0,0x3000);
+	return 0;
+}
+
+rt_err_t rt_eth_init1()
+{
+	gpio_config();
+	clk_config();
+	delay_10ms(3);		
+	GPIO_WritePinOutput(GPIO1, 9, 0);
+	delay_10ms(1);		
+	GPIO_WritePinOutput(GPIO1, 9, 1);
+	delay_10ms(1);
+	
+	uint32_t reg1;
+	
+	ENET_SetSMI((ENET_Type*)0x402D8000,50*1000*1000,false);
+	
+	status_t status = PHY_Read((ENET_Type*)0x402D8000,0,0,&reg1);
+	if (status != 0){
+		PRINTF("read failed\n");
+	}else{
+		PRINTF("reg:0x%x\n",reg1);
+	}
+	
+	PHY_Write((ENET_Type*)0x402D8000,0,0,0x3000);
 	return 0;
 }

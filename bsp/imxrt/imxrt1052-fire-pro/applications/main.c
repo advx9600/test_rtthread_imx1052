@@ -15,7 +15,7 @@
 #include "fal.h"
 #include "bsp_norflash.h"
 /* defined the LED pin: GPIO1_IO9 */
-#define LED0_PIN               GET_PIN(1,24)
+#define LED0_PIN               GET_PIN(1,25)
 #define FS_PARTITION_NAME			"abs"
 
 #define PRINTF rt_kprintf
@@ -23,11 +23,12 @@ int main(void)
 {
     /* set LED0 pin mode to output */
     rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
+//		imx_ether_init();
 		
-		#if 0	
-		rt_eth_test();
+		#if 1
+		rt_eth_init1();
 		#endif
-	
+		
 		#if 0
 		if (dfs_mkfs("elm","W25Q128")){
 			rt_kprintf("dfs_mkfs failed\n");
