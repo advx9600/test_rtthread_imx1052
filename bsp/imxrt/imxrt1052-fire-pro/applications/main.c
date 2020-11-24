@@ -14,19 +14,45 @@
 #include "dfs_fs.h"
 #include "fal.h"
 #include "bsp_norflash.h"
+
+#include <sys/types.h>
+#include <sys/socket.h>
 /* defined the LED pin: GPIO1_IO9 */
 #define LED0_PIN               GET_PIN(1,25)
 #define FS_PARTITION_NAME			"abs"
 
 #define PRINTF rt_kprintf
 int main(void)
-{
+	{
+		SCB_DisableDCache();
+		SCB_DisableICache();
     /* set LED0 pin mode to output */
-    rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
+    rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);			
+//		lwip_system_init();
+//		lwip_init();
+//		tcpip_init();
+//		register_dev22();
+//		return 0;
 //		imx_ether_init();
+//		lwip_init();
+		register_dev22();
 		
-		#if 1
-		rt_eth_init1();
+		
+		#if 0
+		int sockfd=socket(AF_INET,SOCK_DGRAM,0);
+		
+		struct sockaddr_in addr;
+		addr.sin_family =AF_INET;
+    addr.sin_port =htons(1324);
+    addr.sin_addr.s_addr = inet_addr("192.168.5.26");
+		
+		while(1){
+		char buf[10]={0x1,0x2,0x3,0x4,0x5,0x6,0x7,0x8,0x9};
+			int ret = sendto(sockfd,&buf,
+         sizeof(buf),0,(struct sockaddr*)&addr,sizeof(addr));
+			printf("send data :%d\n",ret);
+			rt_thread_mdelay(1000);
+		}
 		#endif
 		
 		#if 0
@@ -71,7 +97,6 @@ int main(void)
 				}
 		}
 		#endif
-		
     while (1)
     {
         rt_pin_write(LED0_PIN, PIN_HIGH);

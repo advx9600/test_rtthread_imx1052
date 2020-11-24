@@ -117,10 +117,7 @@ status_t PHY_Init(ENET_Type *base, uint32_t phyAddr, uint32_t srcClock_Hz)
                         if ((bssReg & PHY_BSTATUS_AUTONEGCOMP_MASK) != 0)
                         {
                             /* Wait a moment for Phy status stable. */
-                            for (timeDelay = 0; timeDelay < PHY_TIMEOUT_COUNT; timeDelay ++)
-                            {
-                                __ASM("nop");
-                            }
+                            rt_thread_mdelay(1000);
                             break;
                         }
                     }

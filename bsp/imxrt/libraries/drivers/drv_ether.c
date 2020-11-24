@@ -134,7 +134,6 @@ rt_err_t rt_eth_test()
 	delay_10ms(1);		
 	GPIO_WritePinOutput(GPIO1, 9, 1);
 	delay_10ms(1);
-	
 	uint32_t reg1;
 		
 		ENET_SetSMI((ENET_Type*)0x402D8000,50*1000*1000,false);
@@ -146,7 +145,7 @@ rt_err_t rt_eth_test()
 			PRINTF("reg:0x%x\n",reg1);
 		}
 		
-		PHY_Write((ENET_Type*)0x402D8000,0,0,0x3000);
+	PHY_Write((ENET_Type*)0x402D8000,0,0,0x3000);
 	return 0;
 }
 
@@ -166,9 +165,9 @@ rt_err_t rt_eth_init1()
 	
 	status_t status = PHY_Read((ENET_Type*)0x402D8000,0,0,&reg1);
 	if (status != 0){
-		PRINTF("read failed\n");
+		logi("read failed\n");
 	}else{
-		PRINTF("reg:0x%x\n",reg1);
+		logi("reg:0x%x\n",reg1);
 	}
 	
 	PHY_Write((ENET_Type*)0x402D8000,0,0,0x3000);
