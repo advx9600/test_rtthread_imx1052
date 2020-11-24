@@ -36,6 +36,7 @@ extern int heap_end;
 
 #define HEAP_SIZE           ((uint32_t)HEAP_END - (uint32_t)HEAP_BEGIN)
 
+#define BSP_USING_SDRAM
 void rt_hw_board_init(void);
 
 #endif
