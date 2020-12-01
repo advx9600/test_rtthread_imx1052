@@ -149,7 +149,7 @@ rt_err_t rt_eth_test()
 	return 0;
 }
 
-rt_err_t rt_eth_init1()
+rt_err_t rt_eth_init1(void)
 {
 	gpio_config();
 	clk_config();

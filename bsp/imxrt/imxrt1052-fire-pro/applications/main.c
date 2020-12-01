@@ -24,8 +24,8 @@
 #define PRINTF rt_kprintf
 int main(void)
 	{
-		SCB_DisableDCache();
-		SCB_DisableICache();
+//		SCB_DisableDCache();
+//		SCB_DisableICache();
     /* set LED0 pin mode to output */
     rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);			
 //		lwip_system_init();
@@ -33,9 +33,9 @@ int main(void)
 //		tcpip_init();
 //		register_dev22();
 //		return 0;
-//		imx_ether_init();
+//		imx_ether_init();	
 //		lwip_init();
-		register_dev22();
+//		register_dev22();
 		
 		
 		#if 0
