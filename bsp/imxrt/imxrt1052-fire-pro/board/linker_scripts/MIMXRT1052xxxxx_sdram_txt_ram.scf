@@ -99,4 +99,8 @@ LR_m_text m_interrupts_start m_text_start+m_text_size-m_interrupts_size {   ; lo
   }
   ARM_LIB_STACK m_data_start+m_data_size EMPTY -Stack_Size { ; Stack region growing down
   }
+  RW_m_ncache m_ncache_start m_ncache_size { ; ncache RW data
+    ;* (NonCacheable.init)
+    * (NonCacheable)
+  }
 }
