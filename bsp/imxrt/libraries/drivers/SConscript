@@ -3,11 +3,13 @@ from building import *
 cwd = GetCurrentDir()
 
 src = []
-src += ['fsl_phy.c']
-src += ['drv_ether.c']
-src += ['drv_ether2.c']
-src += ['fsl_enet.c']
 
+if GetDepend('BSP_USING_ETHER'):
+    src += ['fsl_phy.c']
+    src += ['drv_ether.c']
+    src += ['drv_ether2.c']
+    src += ['fsl_enet.c']
+    
 if GetDepend('BSP_USING_W25Q128'):
     src += ['spi2_w25q128.c']
     

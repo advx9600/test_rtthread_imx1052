@@ -242,7 +242,12 @@ menu "Onboard Peripheral Drivers"
         bool "Enable RS485"
         select BSP_USING_LPUART5
         default n
-
+	
+	config BSP_USING_ETHER
+		bool "Enable ether Lan8720a"
+		select RT_USING_LWIP
+		default n
+		
 endmenu
 
 menu "Board extended module Drivers"
