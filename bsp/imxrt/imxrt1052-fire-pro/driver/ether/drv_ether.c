@@ -142,7 +142,7 @@ rt_err_t rt_eth_test()
 		if (status != 0){
 			PRINTF("read failed\n");
 		}else{
-			PRINTF("reg:0x%x\n",reg1);
+//			PRINTF("reg:0x%x\n",reg1);
 		}
 		
 	PHY_Write((ENET_Type*)0x402D8000,0,0,0x3000);
@@ -167,7 +167,7 @@ rt_err_t rt_eth_init1(void)
 	if (status != 0){
 		logi("read failed\n");
 	}else{
-		logi("reg:0x%x\n",reg1);
+//		logi("reg:0x%x\n",reg1);
 	}
 	
 	PHY_Write((ENET_Type*)0x402D8000,0,0,0x3000);

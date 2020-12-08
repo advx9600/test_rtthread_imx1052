@@ -1,0 +1,15 @@
+from building import *
+
+cwd = GetCurrentDir()
+
+src = []
+
+if GetDepend('BSP_USING_FILE_TEST'):
+    src += ['fileread.c']
+    src += ['filewrite.c']
+
+path =  [cwd]
+
+group = DefineGroup('Filetest', src, depend = [''], CPPPATH = path)
+
+Return('group')

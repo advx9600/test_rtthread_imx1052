@@ -248,6 +248,14 @@ menu "Onboard Peripheral Drivers"
 		select RT_USING_LWIP
 		default n
 		
+	config BSP_USING_SDCARD
+		bool "Enable sdcard"
+		default n
+	
+	config BSP_USING_FILE_TEST:
+		bool "use file read and write"
+		default n
+		
 endmenu
 
 menu "Board extended module Drivers"

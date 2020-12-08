@@ -1,0 +1,20 @@
+from building import *
+
+cwd = GetCurrentDir()
+
+src = []
+
+if GetDepend('BSP_USING_SDCARD'):
+    src += ['fsl_usdhc.c']
+    src += ['fsl_sdio.c']
+    src += ['fsl_sd.c']
+    src += ['fsl_sdmmc_event.c']
+    src += ['fsl_sdmmc_host.c']
+    src += ['fsl_sdmmc_common.c']
+    src += ['drv_sdcard.c']
+
+path =  [cwd]
+
+group = DefineGroup('Sdcard', src, depend = [''], CPPPATH = path)
+
+Return('group')

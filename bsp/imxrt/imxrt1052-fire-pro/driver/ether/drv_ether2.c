@@ -106,7 +106,7 @@ static rt_err_t  imx_ether_init(rt_device_t dev)
     ehtertype->EIMR = ENET_EIMR_RXF_MASK;		
     NVIC_SetPriority(ENET_IRQn, 0x7);
     NVIC_EnableIRQ(ENET_IRQn);
-    logi("init success\n");
+    logi("init success");
     return 0;
 }
 
@@ -139,7 +139,7 @@ static rt_size_t rt_stm32_eth_write(rt_device_t dev, rt_off_t pos, const void *b
 
 static rt_err_t rt_stm32_eth_control(rt_device_t dev, int cmd, void *args)
 {
-    LOG_D("emac control");
+//    LOG_D("emac control");
 
     switch (cmd)
     {
@@ -149,7 +149,7 @@ static rt_err_t rt_stm32_eth_control(rt_device_t dev, int cmd, void *args)
             if (args)
             {
                 rt_memcpy(args, g_macAddr, 6);
-                logi("get ok");
+//                logi("get ok");
             }
             else return -RT_ERROR;
 
@@ -422,7 +422,7 @@ int register_dev22(void)
 
     if (RT_EOK == state)
     {
-        LOG_D("emac device init success");
+//        LOG_D("emac device init success");
     }
     else
     {

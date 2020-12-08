@@ -17,13 +17,14 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <dfs_posix.h>
 /* defined the LED pin: GPIO1_IO9 */
 #define LED0_PIN               GET_PIN(1,25)
 #define FS_PARTITION_NAME			"abs"
 
 #define PRINTF rt_kprintf
 int main(void)
-	{
+{
 //		SCB_DisableDCache();
 //		SCB_DisableICache();
     /* set LED0 pin mode to output */
@@ -36,7 +37,6 @@ int main(void)
 //		imx_ether_init();	
 //		lwip_init();
 //		register_dev22();
-		
 		
 		#if 0
 		int sockfd=socket(AF_INET,SOCK_DGRAM,0);
@@ -70,30 +70,49 @@ int main(void)
 		#endif
 		
 		#if 1
-
+		#define ELM_MOUNT_NAME "/"
+    if (0 == dfs_mount("sd0", ELM_MOUNT_NAME,"elm",0,0))
+    {
+//				rt_kprintf("dfs_mount success\n");
+    }else{
+			if (dfs_mkfs("elm","sd0")){
+				rt_kprintf("dfs_mkfs failed\n");
+				return -1;
+			}
+			if (dfs_mount("sd0", ELM_MOUNT_NAME,"elm",0,0)){
+				rt_kprintf("dfs_mount failed\n");
+				return -1;
+			}
+		}
+		#endif
+		
+		#if 0
 		fal_init();
 		
 		if (fal_mtd_nor_device_create(FS_PARTITION_NAME) == RT_NULL){
 			printf("create %s failed\n",FS_PARTITION_NAME);
 			return -1;
 		}
-
-		if (dfs_mount(FS_PARTITION_NAME, "/", "lfs", 0, 0) == 0)
+		#define LFS_MOUNT_NAME "/"
+		if (dfs_mount(FS_PARTITION_NAME, LFS_MOUNT_NAME, "lfs", 0, 0) == 0)
 		{
-				printf("Filesystem initialized!");
+//				printf("Filesystem initialized!");
 		}
 		else
-		{
-				/* ??????? */
-				dfs_mkfs("lfs", FS_PARTITION_NAME);
+		{				
+				if (dfs_mkfs("lfs", FS_PARTITION_NAME)){
+					printf("dfs_mkfs lfs failed\n");
+					return -1;
+				}
 				/* ?? littlefs */
-				if (dfs_mount(FS_PARTITION_NAME, "/", "lfs", 0, 0) == 0)
+				if (dfs_mount(FS_PARTITION_NAME, LFS_MOUNT_NAME, "lfs", 0, 0) == 0)
 				{
-						printf("Filesystem initialized!");
+//						printf("Filesystem initialized!");
 				}
 				else
 				{
 						printf("Failed to initialize filesystem!");
+					return -1;
 				}
 		}
 		#endif

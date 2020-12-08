@@ -150,7 +150,7 @@ static void BOARD_ConfigMPU(void)
     CopyAndUseRAMVectorTable();    
 #endif
 }
-
+//extern volatile uint32_t g_eventTimeMilliseconds;
 
 /* This is the timer interrupt service routine. */
 void SysTick_Handler(void)
