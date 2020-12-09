@@ -3,42 +3,44 @@
 
 static void gpio_init(void)
 {
+	#define CONFIG_MUTEX 0x10B1U
+//	#define CONFIG_MUTEX 0x7089U
     IOMUXC_SetPinMux(
         IOMUXC_GPIO_SD_B0_00_USDHC1_CMD,        /* GPIO_SD_B0_00 is configured as USDHC1_CMD */
         0U);                                    /* Software Input On Field: Input Path is determined by functionality */
     IOMUXC_SetPinConfig(
         IOMUXC_GPIO_SD_B0_00_USDHC1_CMD,
-        0x7089U);
+        CONFIG_MUTEX);
     IOMUXC_SetPinMux(
         IOMUXC_GPIO_SD_B0_01_USDHC1_CLK,        /* GPIO_SD_B0_01 is configured as USDHC1_CLK */
         0U);                                    /* Software Input On Field: Input Path is determined by functionality */
     IOMUXC_SetPinConfig(
         IOMUXC_GPIO_SD_B0_01_USDHC1_CLK,
-        0x7089U);
+        CONFIG_MUTEX);
     IOMUXC_SetPinMux(
         IOMUXC_GPIO_SD_B0_02_USDHC1_DATA0,      /* GPIO_SD_B0_02 is configured as USDHC1_DATA0 */
         0U);                                    /* Software Input On Field: Input Path is determined by functionality */
     IOMUXC_SetPinConfig(
         IOMUXC_GPIO_SD_B0_02_USDHC1_DATA0,
-        0x7089U);
+        CONFIG_MUTEX);
     IOMUXC_SetPinMux(
         IOMUXC_GPIO_SD_B0_03_USDHC1_DATA1,      /* GPIO_SD_B0_03 is configured as USDHC1_DATA1 */
         0U);                                    /* Software Input On Field: Input Path is determined by functionality */
     IOMUXC_SetPinConfig(
         IOMUXC_GPIO_SD_B0_03_USDHC1_DATA1,
-        0x7089U);
+        CONFIG_MUTEX);
     IOMUXC_SetPinMux(
         IOMUXC_GPIO_SD_B0_04_USDHC1_DATA2,      /* GPIO_SD_B0_04 is configured as USDHC1_DATA2 */
         0U);                                    /* Software Input On Field: Input Path is determined by functionality */
     IOMUXC_SetPinConfig(
         IOMUXC_GPIO_SD_B0_04_USDHC1_DATA2,
-        0x7089U);
+        CONFIG_MUTEX);
     IOMUXC_SetPinMux(
         IOMUXC_GPIO_SD_B0_05_USDHC1_DATA3,      /* GPIO_SD_B0_05 is configured as USDHC1_DATA3 */
         0U);                                    /* Software Input On Field: Input Path is determined by functionality */
     IOMUXC_SetPinConfig(
         IOMUXC_GPIO_SD_B0_05_USDHC1_DATA3,      /* GPIO_SD_B0_02 PAD functional properties : */
-        0x7089U);                               /* Slew Rate Field: Fast Slew Rate
+        CONFIG_MUTEX);                               /* Slew Rate Field: Fast Slew Rate
                                                  Drive Strength Field: R0(150 Ohm @ 3.3V, 260 Ohm@1.8V)
                                                  Speed Field: medium(100MHz)
                                                  Open Drain Enable Field: Open Drain Disabled
